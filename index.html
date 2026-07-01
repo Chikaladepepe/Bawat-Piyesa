@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Jai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f3efff; /* Light Purple / Lavender */
+            --env-color: #e0d4ff;
+            --env-dark: #cbb8ff;
+            --seal-color: #9b6cc3;
+            --text-color: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Ambient Floating Particles */
+        .particle {
+            position: absolute;
+            background: rgba(155, 108, 195, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Envelope Container */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--env-dark);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Flap */
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid var(--env-color);
+            transform-origin: top;
+            transition: transform 0.6s 0.4s ease;
+            z-index: 3;
+        }
+
+        /* Envelope Front Sides */
+        .pocket {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid var(--env-color);
+            z-index: 4;
+        }
+
+        .pocket::before { /* Left side */
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -150px;
+            border-left: 150px solid var(--env-dark);
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+        }
+
+        .pocket::after { /* Right side */
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -150px;
+            border-right: 150px solid var(--env-dark);
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+        }
+
+        /* Letter Paper */
+        .letter {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: white;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 0.8s 0.8s ease, height 0.8s 0.8s ease;
+            z-index: 2;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            scrollbar-width: thin;
+            scrollbar-color: var(--seal-color) transparent;
+        }
+
+        .letter::-webkit-scrollbar { width: 3px; }
+        .letter::-webkit-scrollbar-thumb { background: var(--seal-color); }
+
+        .letter p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Seal */
+        .seal {
+            position: absolute;
+            top: 80px;
+            left: 130px;
+            width: 40px;
+            height: 40px;
+            background: var(--seal-color);
+            border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease;
+        }
+
+        /* Opened State Animations */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-120px);
+            height: 350px;
+            z-index: 6;
+        }
+
+        .envelope-wrapper.open .seal {
+            transform: scale(0);
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 50px;
+            color: var(--seal-color);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Background Music -->
+    <audio id="mySong">
+        <source src="https://cdn.pixabay.com/audio/2022/02/22/audio_d0c6ff1101.mp3" type="audio/mp3">
+        <!-- Note: Replace the URL above with your direct link to Bawat Piyesa -->
+    </audio>
+
+    <div class="envelope-wrapper" id="envelopeWrap" onclick="openEnvelope()">
+        <div class="envelope">
+            <div class="flap"></div>
+            <div class="pocket"></div>
+            <div class="letter" id="letterPaper">
+                <p>
+                    Hello Jai<br><br>
+                    I wanted to tell you how much you mean to me<br><br>
+                    Bawat piyesa ng buhay ko ay mas kumpleto dahil sa iyo<br><br>
+                    (Replace this with your long letter text later)<br><br>
+                    I love you Julian Cute
+                </p>
+            </div>
+            <div class="seal">J</div>
+        </div>
+    </div>
+
+    <div class="instruction" id="hint">CLICK TO OPEN</div>
+
+    <script>
+        function openEnvelope() {
+            // Trigger Animation
+            document.getElementById('envelopeWrap').classList.add('open');
+            document.getElementById('hint').style.display = 'none';
+
+            // Trigger Music
+            var song = document.getElementById('mySong');
+            song.play();
+        }
+
+        // Create background particles
+        for (let i = 0; i < 20; i++) {
+            let p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = p.style.height = Math.random() * 10 + 5 + 'px';
+            p.style.animationDelay = Math.random() * 10 + 's';
+            document.body.appendChild(p);
+        }
+    </script>
+</body>
+</html>
