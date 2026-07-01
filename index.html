@@ -13,6 +13,7 @@
             --env-dark: #d1c4ff;
             --seal-color: #9b6cc3;
             --text-color: #4a4a4a;
+            --highlight-blue: #3498db; /* Blue highlight color */
         }
 
         body {
@@ -27,7 +28,7 @@
             overflow: hidden;
         }
 
-        /* Floating Particles */
+        /* Floating particles */
         .particle {
             position: absolute;
             background: rgba(155, 108, 195, 0.2);
@@ -42,24 +43,22 @@
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
-        /* Envelope Styling */
         .envelope-wrapper {
             position: relative;
             cursor: pointer;
             transition: transform 0.3s;
             z-index: 10;
-        }
-
-        .envelope-wrapper:hover {
-            transform: scale(1.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .envelope {
             position: relative;
-            width: 320px;
-            height: 220px;
+            width: 300px;
+            height: 200px;
             background: var(--env-dark);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .flap {
@@ -67,9 +66,9 @@
             top: 0;
             width: 0;
             height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-top: 110px solid var(--env-color);
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid var(--env-color);
             transform-origin: top;
             transition: transform 0.6s 0.4s ease;
             z-index: 3;
@@ -80,70 +79,77 @@
             bottom: 0;
             width: 0;
             height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-bottom: 110px solid var(--env-color);
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid var(--env-color);
             z-index: 4;
         }
 
         .pocket::before {
             content: '';
             position: absolute;
-            bottom: -110px;
-            left: -160px;
-            border-left: 160px solid var(--env-dark);
-            border-top: 110px solid transparent;
-            border-bottom: 110px solid transparent;
+            bottom: -100px;
+            left: -150px;
+            border-left: 150px solid var(--env-dark);
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
         }
 
         .pocket::after {
             content: '';
             position: absolute;
-            bottom: -110px;
-            right: -160px;
-            border-right: 160px solid var(--env-dark);
-            border-top: 110px solid transparent;
-            border-bottom: 110px solid transparent;
+            bottom: -100px;
+            right: -150px;
+            border-right: 150px solid var(--env-dark);
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
         }
 
-        /* The Letter Design */
+        /* Letter Styling */
         .letter {
             position: absolute;
-            bottom: 5px;
-            left: 10px;
-            width: 300px;
-            height: 200px;
+            bottom: 0;
+            width: 280px;
+            height: 180px;
             background: white;
             padding: 30px 20px;
             box-sizing: border-box;
-            transition: transform 0.8s 0.8s ease, height 0.8s 0.8s ease;
+            transition: all 1s 1s ease;
             z-index: 2;
             overflow-y: auto;
             box-shadow: 0 0 15px rgba(0,0,0,0.05);
             scrollbar-width: thin;
             scrollbar-color: var(--seal-color) transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .letter::-webkit-scrollbar { width: 3px; }
         .letter::-webkit-scrollbar-thumb { background: var(--seal-color); }
 
         .letter p {
-            font-size: 0.8rem;
-            line-height: 1.8;
+            font-size: 0.85rem;
+            line-height: 2;
             color: var(--text-color);
             margin: 0;
             text-align: center;
-            text-transform: uppercase; /* Mono Upper */
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Wax Seal Initial J */
+        /* Highlight classes */
+        .blue {
+            color: var(--highlight-blue);
+            font-weight: bold;
+        }
+
         .seal {
             position: absolute;
-            top: 90px;
-            left: 140px;
-            width: 45px;
-            height: 45px;
+            top: 80px;
+            left: 130px;
+            width: 40px;
+            height: 40px;
             background: var(--seal-color);
             border-radius: 50%;
             z-index: 5;
@@ -152,46 +158,43 @@
             align-items: center;
             color: white;
             font-weight: bold;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             transition: transform 0.5s ease;
         }
 
-        /* Open State */
+        /* Centered and Scrollable Open State */
         .envelope-wrapper.open .flap {
             transform: rotateX(180deg);
             z-index: 1;
         }
 
         .envelope-wrapper.open .letter {
-            transform: translateY(-150px);
-            height: 450px;
-            z-index: 6;
+            transform: translateY(-120px);
+            width: 90vw;
+            max-width: 450px;
+            height: 70vh;
+            z-index: 20;
+            padding: 40px 30px;
         }
 
         .envelope-wrapper.open .seal {
             transform: scale(0);
         }
 
-        /* Instruction Hint */
         .hint-text {
             margin-top: 30px;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            opacity: 0.3;
+            font-size: 0.75rem;
+            opacity: 0.4;
             transition: opacity 0.8s ease;
-            pointer-events: none;
             text-transform: uppercase;
         }
 
-        .fade-out {
-            opacity: 0 !important;
-        }
+        .fade-out { opacity: 0 !important; }
     </style>
 </head>
 <body>
 
-    <!-- Local Audio -->
     <audio id="mySong">
         <source src="music.mp3" type="audio/mp3">
     </audio>
@@ -202,17 +205,17 @@
             <div class="pocket"></div>
             <div class="letter" id="letterPaper">
                 <p>
-                    Hello Jai I stayed up late making this for you because I wanted to tell you that you are my bawat piyesa. I find myself wondering what I would even do without you because you have become the melody that plays in the background of my every thought. I want you to know that I see us together in the future and I hope with all my heart that you feel the same way. Genuinely I am not looking for anything else anymore because I have found everything I need in you. It feels unreal that I can actually call you mine and that I get to receive your love every single day. I cherish every notification and every word you send me because they are the highlights of my life.<br><br>
+                    Hello Jai I stayed up late making this for you because I wanted to tell you that you are my <span class="blue">bawat piyesa</span>. I find myself wondering what I would even do without you because you have become the melody that plays in the background of my every thought. I want you to know that I see us together in the future and I hope with all my heart that you feel the same way. Genuinely I am not looking for anything else anymore because I have found <span class="blue">everything I need in you</span>. It feels unreal that I can actually call you mine and that I get to receive your love every single day. I cherish every notification and every word you send me because they are the highlights of my life.<br><br>
                     
-                    I want to treat you exactly how you want to be treated so please tell me if I ever do something wrong or if I say something that offends you. I never want to lose you and I will do everything in my power to keep us strong. In the most selfish way possible I want you to be mine and solely mine only. I love you so much Jai and no amount of words created by humanity could ever compare to what I feel in my soul. My parents and my whole family know about you now and they see how happy you make me. In the future I hope I get to brag about how I married the person I met at such a young age and how we grew up together into something beautiful.<br><br>
+                    I want to treat you exactly how you want to be treated so please tell me if I ever do something wrong or if I say something that offends you. I never want to lose you and I will do everything in my power to keep us strong. In the most selfish way possible I want you to be mine and solely mine only. I love you so much Jai and no amount of words created by humanity could ever compare to <span class="blue">what I feel in my soul</span>. My parents and my whole family know about you now and they see how happy you make me. In the future I hope I get to brag about how I married the person I met at such a young age and how we grew up together into something beautiful.<br><br>
                     
-                    I do not care if we become dry or if the fun phase of the relationship ends because I want this to work forever. I want us to work through every season of life even the ones that feel quiet or boring. I know that lately I have been joking about you having someone else but please know that I am only playing and my heart knows you are only for me. And regarding anyone else who might show interest in me please know I do not care about them at all. You have my full loyalty Jai and my eyes will never wander to anyone else. God said love is a choice so I will gladly choose you for eternity and beyond.<br><br>
+                    I do not care if we become dry or if the fun phase of the relationship ends because I want this to work forever. I want us to work through every season of life even the ones that feel quiet or boring. I know that lately I have been joking about you having someone else but please know that I am only playing and my heart knows you are only for me. And regarding anyone else who might show interest in me please know I do not care about them at all. You have my <span class="blue">full loyalty</span> Jai and my eyes will never wander to anyone else. God said love is a choice so I will gladly choose you for eternity and beyond.<br><br>
                     
                     I do not care how long it takes until we finally see each other in person. Just like Jacob I will yearn for you and wait for as long as it takes even if it is more than seven years. Every day apart is just another day closer to the moment I finally get to hold you. You are my bawat piyesa and I do not know what I would do without you. When I ran out of reasons to risk my heart again you were the one who made me want to try. I am still not good enough I know but I guarantee that I will try my best to be better for you each and every day because you deserve the absolute best version of me.<br><br>
                     
-                    Regarding your insecurities please know they are all beautiful to me. It is almost as if they were perfectly paired to fit you and make you who you are. I love them because they are a part of the person I adore so please do not ever think badly of yourself. You are my peace and my home in a world that is often too loud and confusing. Even when the world feels heavy I find my quiet in you and the thought of your smile. I promise to hold your hand through every storm and celebrate every victory by your side no matter how small.<br><br>
+                    Regarding your insecurities please know they are all <span class="blue">beautiful</span> to me. It is almost as if they were <span class="blue">perfectly paired to fit you</span> and make you who you are. I love them because they are a part of the person I adore so please do not ever think badly of yourself. You are my peace and my home in a world that is often too loud and confusing. Even when the world feels heavy I find my quiet in you and the thought of your smile. I promise to hold your hand through every storm and celebrate every victory by your side no matter how small.<br><br>
                     
-                    I want to be the one you run to when you are tired and the one you celebrate with when you are happy. I want to know every version of you and love every single one of them. You are the piece of me that I never knew was missing and now that I have found you I am never letting go. Our story is my favorite one and I cannot wait to see all the chapters we will write together. You are more than enough for me Jai and I will spend the rest of my life making sure you know that you are the most precious person in my world. I love you forever and always.<br><br>
+                    I want to be the one you run to when you are tired and the one you celebrate with when you are happy. I want to know every version of you and love every single one of them. You are the piece of me that I never knew was missing and now that I have found you I am never letting go. Our story is my favorite one and I cannot wait to see all the chapters we will write together. You are more than enough for me Jai and I will spend the rest of my life making sure you know that you are the most <span class="blue">precious person</span> in my world. I love you forever and always.<br><br>
                     
                     Julian Cute
                 </p>
@@ -232,15 +235,11 @@
             if (!wrap.classList.contains('open')) {
                 wrap.classList.add('open');
                 hint.classList.add('fade-out');
-
-                // Trigger music.mp3
-                song.play().catch(error => {
-                    console.log("Audio failed to play. Check if music.mp3 is in the folder.");
-                });
+                song.play();
             }
         }
 
-        // Particle background logic
+        // Particle logic
         for (let i = 0; i < 25; i++) {
             let p = document.createElement('div');
             p.className = 'particle';
