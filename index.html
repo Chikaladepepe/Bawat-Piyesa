@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Each Pieces</title>
+    <!-- Space Mono Font -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,18 +12,15 @@
             --env-color: #f0eaff;
             --env-dark: #d1c4ff;
             --seal-color: #9b6cc3;
-            --text-color: #4a4a4a;
-            --spotify-green: #1db954;
-            --highlight-blue: #3498db;
+            --text-color: #000000; /* Darker text for clarity */
+            --highlight-blue: #0056b3; /* Darker blue for contrast */
+            --spotify-bg: #121212;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* Fixes the blue flicker/hologram on tap/scroll */
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
         }
 
         body {
@@ -33,10 +31,9 @@
             background: var(--bg-color);
             font-family: 'Space Mono', monospace;
             overflow: hidden;
-            user-select: none;
         }
 
-        /* Floating Particles */
+        /* Particles */
         .particle {
             position: absolute;
             background: rgba(155, 108, 195, 0.2);
@@ -50,11 +47,14 @@
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
-        /* Envelope UI */
+        /* Envelope Container */
         .envelope-wrapper {
             position: relative;
             cursor: pointer;
             z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .envelope {
@@ -63,7 +63,6 @@
             height: 200px;
             background: var(--env-dark);
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: opacity 0.5s;
         }
 
         .flap {
@@ -75,7 +74,7 @@
             border-right: 150px solid transparent;
             border-top: 100px solid var(--env-color);
             transform-origin: top;
-            transition: transform 0.6s ease;
+            transition: transform 0.6s 0.2s ease;
             z-index: 3;
         }
 
@@ -100,35 +99,34 @@
         .pocket::before { left: -150px; border-left: 150px solid var(--env-dark); }
         .pocket::after { right: -150px; border-right: 150px solid var(--env-dark); }
 
-        /* The Letter Animation */
+        /* The Letter - High visibility and Scrollable */
         .letter {
             position: absolute;
-            bottom: 10px;
+            bottom: 5px;
             left: 10px;
             width: 280px;
             height: 180px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
+            background: white;
+            padding: 30px 20px;
             box-sizing: border-box;
-            transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 1s 0.8s ease;
             z-index: 2;
             overflow-y: auto;
-            text-align: center;
             scrollbar-width: none;
         }
         .letter::-webkit-scrollbar { display: none; }
 
         .letter p {
             font-size: 0.85rem;
-            line-height: 2.2;
-            text-transform: uppercase;
+            line-height: 2;
             color: var(--text-color);
-            margin: 0;
+            text-align: center;
+            text-transform: uppercase; /* Mono Upper */
         }
 
         .blue { color: var(--highlight-blue); font-weight: bold; }
 
-        /* Seal J */
+        /* Seal */
         .seal {
             position: absolute;
             top: 80px;
@@ -142,84 +140,69 @@
             justify-content: center;
             align-items: center;
             color: white;
+            font-weight: bold;
             font-size: 1.2rem;
-            transition: transform 0.3s;
+            transition: transform 0.4s ease;
         }
 
-        /* Open State: Centering the letter on screen */
-        .envelope-wrapper.open .flap { transform: rotateX(180deg); }
+        /* Centering Animation when opened */
+        .envelope-wrapper.open .flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-wrapper.open .seal { transform: scale(0); }
-        .envelope-wrapper.open .envelope { opacity: 0.2; pointer-events: none; }
-
+        
         .envelope-wrapper.open .letter {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 90vw;
-            max-width: 480px;
-            height: 75vh;
+            max-width: 450px;
+            height: 70vh;
             z-index: 100;
             padding: 50px 30px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
 
-        /* Spotify Interactive Player */
+        /* Spotify Bar */
         .spotify-player {
             position: fixed;
-            bottom: -120px;
+            bottom: -100px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 380px;
-            background: #121212;
-            padding: 12px 18px;
+            max-width: 400px;
+            background: var(--spotify-bg);
+            padding: 12px 15px;
             border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             color: white;
-            transition: bottom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: bottom 0.8s ease;
             z-index: 200;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .spotify-player.show { bottom: 20px; }
 
-        .spotify-player.show { bottom: 25px; }
-
-        .album-art {
-            width: 48px;
-            height: 48px;
-            border-radius: 4px;
-            object-fit: cover;
-        }
-
-        .song-info { flex: 1; min-width: 0; }
+        .album-art { width: 45px; height: 45px; border-radius: 4px; object-fit: cover; }
+        .song-info { flex: 1; overflow: hidden; }
         .song-title { font-size: 0.8rem; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .artist { font-size: 0.7rem; color: #b3b3b3; margin-top: 2px; }
+        .artist { font-size: 0.7rem; color: #b3b3b3; }
 
-        .controls { cursor: pointer; display: flex; align-items: center; color: white; }
-        
+        .controls { cursor: pointer; color: white; display: flex; align-items: center; }
+
         .progress-container {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: #282828;
-            border-radius: 0 0 10px 10px;
+            bottom: 0; left: 0; width: 100%; height: 3px;
+            background: #333; border-radius: 0 0 10px 10px;
         }
-        .progress-bar { width: 0%; height: 100%; background: #fff; transition: width 0.1s linear; }
+        .progress-bar { width: 0%; height: 100%; background: #fff; }
 
         .hint {
             position: absolute;
-            bottom: -45px;
+            bottom: -40px;
             width: 100%;
             text-align: center;
-            font-size: 0.65rem;
-            opacity: 0.3;
-            letter-spacing: 2px;
+            font-size: 0.7rem;
+            opacity: 0.4;
             text-transform: uppercase;
         }
     </style>
@@ -236,9 +219,9 @@
             <div class="pocket"></div>
             <div class="letter" id="letterPaper">
                 <p>
-                    Hello Jai I stayed up late making this for you because I wanted to tell you that you are my <span class="blue">bawat piyesa</span>. I find myself wondering what I would even do without you because you have become the melody that plays in the background of my every thought. I want you to know that I see us together in the future and I hope with all my heart that you feel the same way. Genuinely I am not looking for anything else anymore because I have found <span class="blue">everything I need in you</span>. It feels unreal that I can actually call you mine and that I get to receive your love every single day.<br><br>
+                    Hello Jai I stayed up late making this for you because I wanted to tell you that you are my <span class="blue">bawat piyesa</span>. I find myself wondering what I would even do without you because you have become the melody that plays in the background of my every thought. I want you to know that I see us together in the future and I hope with all my heart that you feel the same way. Genuinely I am not looking for anything else anymore because I have found <span class="blue">everything I need in you</span>. It feels unreal that I can actually call you mine and that I get to receive your love every single day. I cherish every notification and every word you send me because they are the highlights of my life.<br><br>
                     
-                    I want to treat you exactly how you want to be treated so please tell me if I ever do something wrong or if I say something that offends you. I never want to lose you and I will do everything in my power to keep us strong. In the most selfish way possible I want you to be mine and solely mine only. I love you so much Jai and no amount of words created by humanity could ever compare to <span class="blue">what I feel in my soul</span>.<br><br>
+                    I want to treat you exactly how you want to be treated so please tell me if I ever do something wrong or if I say something that offends you. I never want to lose you and I will do everything in my power to keep us strong. In the most selfish way possible I want you to be mine and solely mine only. I love you so much Jai and no amount of words created by humanity could ever compare to <span class="blue">what I feel in my soul</span>. My parents and my whole family know about you now and they see how happy you make me. In the future I hope I get to brag about how I married the person I met at such a young age and how we grew up together into something beautiful.<br><br>
                     
                     I do not care if we become dry or if the fun phase of the relationship ends because I want this to work forever. I want us to work through every season of life even the ones that feel quiet or boring. I know that lately I have been joking about you having someone else but please know that I am only playing and my heart knows you are only for me. And regarding anyone else who might show interest in me please know I do not care about them at all. You have my <span class="blue">full loyalty</span> Jai and my eyes will never wander to anyone else. God said love is a choice so I will gladly choose you for eternity and beyond.<br><br>
                     
@@ -256,16 +239,15 @@
         </div>
     </div>
 
-    <!-- Spotify Style Player -->
+    <!-- Spotify Bar -->
     <div class="spotify-player" id="player">
-        <!-- Aesthetic GIF for Bawat Piyesa vibe -->
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHY5bTlkYjV5bmx1eXptZHFoZ3B4Y2R4dzR4Y2Z4dzR4Y2Z4dzR4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/unQ3IJU2RG7PEPN9qh/giphy.gif" class="album-art">
         <div class="song-info">
             <div class="song-title">Bawat Piyesa</div>
             <div class="artist">Munimuni</div>
         </div>
         <div class="controls" onclick="togglePlay(event)">
-            <svg id="playPauseIcon" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+            <svg id="playPauseIcon" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z"/>
             </svg>
         </div>
@@ -277,38 +259,34 @@
     <script>
         const song = document.getElementById('mySong');
         const player = document.getElementById('player');
-        const progressBar = document.getElementById('progressBar');
-        const playPauseIcon = document.getElementById('playPauseIcon');
+        const icon = document.getElementById('playPauseIcon');
+        const bar = document.getElementById('progressBar');
 
         function openEnvelope() {
             const wrap = document.getElementById('envelopeWrap');
             if (!wrap.classList.contains('open')) {
                 wrap.classList.add('open');
                 player.classList.add('show');
-                document.getElementById('hint').style.opacity = '0';
+                document.getElementById('hint').style.display = 'none';
                 song.play();
             }
         }
 
-        function togglePlay(event) {
-            event.stopPropagation();
+        function togglePlay(e) {
+            e.stopPropagation();
             if (song.paused) {
                 song.play();
-                playPauseIcon.innerHTML = '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z"/>';
+                icon.innerHTML = '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z"/>';
             } else {
                 song.pause();
-                playPauseIcon.innerHTML = '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>';
+                icon.innerHTML = '<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>';
             }
         }
 
-        song.ontimeupdate = function() {
-            if (song.duration) {
-                const percent = (song.currentTime / song.duration) * 100;
-                progressBar.style.width = percent + '%';
-            }
+        song.ontimeupdate = () => {
+            bar.style.width = (song.currentTime / song.duration * 100) + '%';
         };
 
-        // Particles
         for (let i = 0; i < 20; i++) {
             let p = document.createElement('div');
             p.className = 'particle';
@@ -319,4 +297,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
